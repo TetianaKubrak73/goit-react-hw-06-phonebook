@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
-
+import { getContacts, getFilter } from '../../redux/selector';
 import ContactForm from '../ContactForm/ContactForm';
 import ContactList from '../ContactList/ContactList';
 import Filter from '../Filter/Filter';
@@ -9,10 +9,11 @@ import {
   deleteContacts,
 } from '../../redux/contacts/contact-slice';
 import { setFilter } from '../../redux/filter/filter-slice';
+
 const PhoneBook = () => {
-  const contacts = useSelector(store => store.contacts);
+  const contacts = useSelector(getContacts);
   const dispatch = useDispatch();
-  const filter = useSelector(store => store.filter);
+  const filter = useSelector(getFilter);
 
   //   Добавление нового контакта в список контактов
   const isDuplicate = ({ name, number }) => {

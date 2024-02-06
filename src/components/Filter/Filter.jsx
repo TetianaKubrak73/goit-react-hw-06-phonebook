@@ -4,7 +4,12 @@ function Filter({ value, onChangeFilter }) {
     <div className={style.filter}>
       <label>
         Find contacts by name
-        <input type="text" value={value} onChange={onChangeFilter} />
+        <input
+          type="text"
+          value={value}
+          onChange={onChangeFilter}
+          placeholder="Search"
+        />
       </label>
     </div>
   );

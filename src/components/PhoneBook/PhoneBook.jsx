@@ -1,23 +1,22 @@
-import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import ContactForm from '../ContactForm/ContactForm';
 import ContactList from '../ContactList/ContactList';
 import Filter from '../Filter/Filter';
 import style from './PhoneBook.module.css';
-import { addContacts, deleteContacts } from 'components/redux/actions';
-
+import { addContacts, deleteContacts } from '../redux/contacts/contact-slice';
+import { setFilter } from '../redux/filter/filter-slice';
 const PhoneBook = () => {
-  const contacts = useSelector(state => state.contacts);
+  const contacts = useSelector(store => store.contacts);
   const dispatch = useDispatch();
-  const [filter, setFilter] = useState('');
+  const filter = useSelector(store => store.filter);
 
   //   Добавление нового контакта в список контактов
-  const isDublicate = ({ name, number }) => {
+  const isDuplicate = ({ name, number }) => {
     const normalizedName = name.toLowerCase();
     const normalizedNumber = number.toLowerCase();
 
-    const dublicate = contacts.find(item => {
+    const duplicate = contacts.find(item => {
       const normalizedCurrentName = item.name.toLowerCase();
       const normalizedCurrentNumber = item.number.toLowerCase();
 
@@ -26,11 +25,11 @@ const PhoneBook = () => {
         normalizedCurrentNumber === normalizedNumber
       );
     });
-    return Boolean(dublicate);
+    return Boolean(duplicate);
   };
 
   const onAddContact = data => {
-    if (isDublicate(data)) {
+    if (isDuplicate(data)) {
       return alert(
         `This contact ${data.name}: ${data.number} is already in the book`
       );
@@ -39,18 +38,16 @@ const PhoneBook = () => {
     dispatch(action);
   };
   // Изменение значения фильтра
-  const changeFilter = event => {
-    setFilter(event.target.value);
-  };
+  const changeFilter = ({ target }) => dispatch(setFilter(target.value));
 
   // Получение отфильтрованных контактов
-  const getVisibleContacts = () => {
-    const normalizedFilter = filter.toLowerCase();
+  // const getVisibleContacts = () => {
+  //   const normalizedFilter = filter.toLowerCase();
 
-    return contacts.filter(contact =>
-      contact.name.toLowerCase().includes(normalizedFilter)
-    );
-  };
+  //   return contacts.filter(contact =>
+  //     contact.name.toLowerCase().includes(normalizedFilter)
+  //   );
+  // };
 
   // Удаление контакта из списка
   const onDeleteContact = id => {
@@ -58,7 +55,7 @@ const PhoneBook = () => {
     dispatch(action);
   };
 
-  const visibleContacts = getVisibleContacts();
+  // const visibleContacts = getVisibleContacts();
 
   return (
     <div className={style.container}>
@@ -77,10 +74,7 @@ const PhoneBook = () => {
       )}
       {contacts.length > 0 && (
         // Список контактов
-        <ContactList
-          contacts={visibleContacts}
-          onDeleteContact={onDeleteContact}
-        />
+        <ContactList contacts={contacts} onDeleteContact={onDeleteContact} />
       )}
     </div>
   );

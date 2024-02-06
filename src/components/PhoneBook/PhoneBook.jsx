@@ -41,13 +41,13 @@ const PhoneBook = () => {
   const changeFilter = ({ target }) => dispatch(setFilter(target.value));
 
   // Получение отфильтрованных контактов
-  // const getVisibleContacts = () => {
-  //   const normalizedFilter = filter.toLowerCase();
+  const getVisibleContacts = () => {
+    const normalizedFilter = filter.toLowerCase();
 
-  //   return contacts.filter(contact =>
-  //     contact.name.toLowerCase().includes(normalizedFilter)
-  //   );
-  // };
+    return contacts.filter(contact =>
+      contact.name.toLowerCase().includes(normalizedFilter)
+    );
+  };
 
   // Удаление контакта из списка
   const onDeleteContact = id => {
@@ -55,7 +55,7 @@ const PhoneBook = () => {
     dispatch(action);
   };
 
-  // const visibleContacts = getVisibleContacts();
+  const visibleContacts = getVisibleContacts();
 
   return (
     <div className={style.container}>
@@ -74,7 +74,10 @@ const PhoneBook = () => {
       )}
       {contacts.length > 0 && (
         // Список контактов
-        <ContactList contacts={contacts} onDeleteContact={onDeleteContact} />
+        <ContactList
+          contacts={visibleContacts}
+          onDeleteContact={onDeleteContact}
+        />
       )}
     </div>
   );

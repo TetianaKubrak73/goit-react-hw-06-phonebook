@@ -4,8 +4,11 @@ import ContactForm from '../ContactForm/ContactForm';
 import ContactList from '../ContactList/ContactList';
 import Filter from '../Filter/Filter';
 import style from './PhoneBook.module.css';
-import { addContacts, deleteContacts } from '../redux/contacts/contact-slice';
-import { setFilter } from '../redux/filter/filter-slice';
+import {
+  addContacts,
+  deleteContacts,
+} from '../../redux/contacts/contact-slice';
+import { setFilter } from '../../redux/filter/filter-slice';
 const PhoneBook = () => {
   const contacts = useSelector(store => store.contacts);
   const dispatch = useDispatch();

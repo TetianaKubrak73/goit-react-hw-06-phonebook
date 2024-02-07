@@ -20,10 +20,13 @@ const ContactForm = () => {
   // Обработка отправки формы
   const handleSubmit = event => {
     event.preventDefault();
-    
+
     // Проверка наличия контакта в списке
     const isDuplicate = contacts.some(contact => {
-      return contact.name === state.name && contact.number === state.number;
+      return (
+        contact.name.toLowerCase() === state.name.toLowerCase() &&
+        contact.number === state.number
+      );
     });
 
     if (isDuplicate) {

@@ -1,26 +1,43 @@
 import React, { useState } from 'react';
 import { nanoid } from 'nanoid';
+import { addContacts } from '../../redux/contacts/contact-slice';
+import { getContacts } from '../../redux/selector';
+import { useSelector, useDispatch } from 'react-redux';
 import style from './ContactForm.module.css';
 
-const ContactForm = ({ onSubmit }) => {
+const ContactForm = () => {
   const [state, setState] = useState({
     name: '',
     number: '',
   });
-
   // Генерация уникальных идентификаторов для полей формы
   const nameInputId = nanoid();
   const numberInputId = nanoid();
 
+  const contacts = useSelector(getContacts);
+  const dispatch = useDispatch();
+
   // Обработка отправки формы
   const handleSubmit = event => {
     event.preventDefault();
+    
+    // Проверка наличия контакта в списке
+    const isDuplicate = contacts.some(contact => {
+      return contact.name === state.name && contact.number === state.number;
+    });
 
-    // Вызов функции onSubmit из родительского компонента с передачей объекта контакта
-    onSubmit({ name: state.name, number: state.number });
-
-    // Сброс состояния формы
-    reset();
+    if (isDuplicate) {
+      alert(
+        `This contact ${state.name}: ${state.number} is already in the book`
+      );
+    } else {
+      // Вызов функции addContacts из redux с передачей объекта контакта
+      dispatch(
+        addContacts({ id: nanoid(), name: state.name, number: state.number })
+      );
+      // Сброс состояния формы
+      reset();
+    }
   };
 
   // Обработка изменения значений полей формы
